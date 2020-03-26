@@ -1,12 +1,33 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import { Form, Input, Textarea } from "@rocketseat/unform";
+import { toast } from "react-toastify";
 
 import { Container, Content } from "./styles";
+
+import api from "../../services/api";
 
 import logoImg from "../../assets/logo.svg";
 
 export default function NewIncident() {
+  const ongId = localStorage.getItem("ongId");
+  const history = useHistory();
+
+  async function handleNewIncident(data) {
+    try {
+      await api.post("incidents", data, {
+        headers: {
+          Authorization: ongId
+        }
+      });
+
+      history.push("/profile");
+    } catch (error) {
+      toast.error("Erro ao cadastrar caso, tente novamente.");
+    }
+  }
+
   return (
     <Container>
       <Content>
@@ -25,14 +46,14 @@ export default function NewIncident() {
           </Link>
         </section>
 
-        <form>
-          <input placeholder="Titulo do caso" />
-          <textarea placeholder="Descrição" />
+        <Form onSubmit={handleNewIncident}>
+          <Input name="title" placeholder="Titulo do caso" />
+          <Textarea name="description" placeholder="Descrição" />
 
-          <input placeholder="Valor em reais" />
+          <Input name="value" placeholder="Valor em reais" />
 
           <button className="button">Cadastrar</button>
-        </form>
+        </Form>
       </Content>
     </Container>
   );

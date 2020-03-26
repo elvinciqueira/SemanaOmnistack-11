@@ -1,12 +1,30 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import { Form, Input } from "@rocketseat/unform";
+import { toast } from "react-toastify";
+
+import api from "../../services/api";
 
 import { Container, Content } from "./styles";
 
 import logoImg from "../../assets/logo.svg";
 
 export default function Register() {
+  const history = useHistory();
+
+  async function handleSubmit(data) {
+    try {
+      const response = await api.post("ongs", data);
+
+      toast.success(`Seu ID de acesso: ${response.data.id}`);
+
+      history.push("/");
+    } catch (error) {
+      toast.error("Erro no cadastro, tente novamente");
+    }
+  }
+
   return (
     <Container>
       <Content>
@@ -25,18 +43,18 @@ export default function Register() {
           </Link>
         </section>
 
-        <form>
-          <input placeholder="Nome da ONG" />
-          <input type="email" placeholder="E-mail" />
-          <input placeholder="WhatsApp" />
+        <Form onSubmit={handleSubmit}>
+          <Input name="name" placeholder="Nome da ONG" />
+          <Input name="email" type="email" placeholder="E-mail" />
+          <Input name="whatsapp" placeholder="WhatsApp" />
 
           <div>
-            <input placeholder="Cidade" />
-            <input placeholder="UF" style={{ width: 80 }} />
+            <Input name="city" placeholder="Cidade" />
+            <Input name="uf" placeholder="UF" style={{ width: 80 }} />
           </div>
 
           <button className="button">Cadastrar</button>
-        </form>
+        </Form>
       </Content>
     </Container>
   );
