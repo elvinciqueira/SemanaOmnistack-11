@@ -18,7 +18,7 @@ describe('ONG', () => {
       .send({
         name: 'APAD3',
         email: 'contato@contato.com',
-        whatsapp: '11943062927',
+        whatsapp: '11943062027',
         city: 'Diadema',
         uf: 'SP',
       });
